@@ -1,0 +1,24 @@
+{
+  "name": "jira-custom-ui",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build:vue": "vue-tsc --noEmit && vite build",
+    "build:forge": "tsc -p tsconfig.forge.json",
+    "build": "npm run build:vue && npm run build:forge",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@atlaskit/css-reset": "^6.0.1",
+    "@forge/resolver": "^1.6.1",
+    "vue": "^3.3.4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.2.3",
+    "typescript": "^5.0.2",
+    "vite": "^4.4.5",
+    "vue-tsc": "^2.1.10"
+  }
+}
