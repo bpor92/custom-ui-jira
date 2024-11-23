@@ -5,14 +5,18 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build:vue": "vue-tsc --noEmit && vite build",
+    "build:vue": "vue-tsc --noEmit && vite build --watch",
     "build:forge": "tsc -p tsconfig.forge.json",
     "build": "npm run build:vue && npm run build:forge",
     "preview": "vite preview"
   },
   "dependencies": {
     "@atlaskit/css-reset": "^6.0.1",
+    "@forge/api": "^4.1.0",
+    "@forge/bridge": "^4.1.0",
     "@forge/resolver": "^1.6.1",
+    "@forge/storage": "^1.6.0",
+    "@forge/ui": "^1.11.1",
     "vue": "^3.3.4"
   },
   "devDependencies": {

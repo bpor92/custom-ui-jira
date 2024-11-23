@@ -1,42 +1,69 @@
 <template>
   <div class="app-container">
-    <header class="header">
-      <h1>{{ title }}</h1>
-    </header>
-    <main class="content">
-      <div class="card">
-        <h2>Custom Jira UI</h2>
+    <div>{{ mapping }}</div>
+    <div>{{ status }}</div>
 
-        <p>Status: {{ status }}</p>
-        <button @click="fetchIssues" class="button">
-          Fetch Recent Issues
-        </button>
-        <div v-if="issues.length > 0" class="issues-list">
-          <div v-for="issue in issues" :key="issue.id" class="issue-item">
-            {{ issue.key }} - {{ issue.summary }}
-          </div>
-        </div>
-      </div>
-    </main>
+    <br>
+    <br>
+
+    <input type="file" @change="addFile" />
+
+    <br>
+    <br>
+
+    <button @click="getDevelopers">get dev</button>
+    <div>{{ developers }}</div>
+
+    <button @click="deleteDeveloper">delete dev</button>
+
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { FileUtil } from './utils/file-util'
+import { ValidationUtil } from './utils/validation-util'
+import { invoke } from '@forge/bridge';
 
-const title = ref('Jira Custom UI')
-const status = ref('Ready')
-const issues = ref<Array<{ id: string; key: string; summary: string }>>([])
+const mapping = ref({})
+const status = ref('')
 
-const fetchIssues = () => {
-  status.value = 'Fetching...'
-  // Simulate fetching issues
-  setTimeout(() => {
-    issues.value = [
-      { id: '1', key: 'PROJ-1', summary: 'Test Issue 1' },
-      { id: '2', key: 'PROJ-2', summary: 'Test Issue 2' }
-    ]
-    status.value = 'Done'
-  }, 1000)
+const addFile = async (event: Event) => {
+  const file = (event.target as HTMLInputElement).files?.[0]
+  if (!file) return
+  try {
+    const content = await FileUtil.readFile(file)
+    const parsedContent = JSON.parse(content)
+    if (ValidationUtil.isValidMapping(parsedContent)) {
+      await invoke('saveDevelopers', parsedContent)
+      getDevelopers()
+    } else {
+      status.value = 'Invalid mapping format'
+    }
+  } catch (error) {
+    status.value = 'Error processing file'
+    console.error('File processing error:', error)
+  }
 }
+
+const developers = ref<unknown>('')
+const getDevelopers = async () => {
+  try {
+    const result = await invoke('getDevelopers')
+    developers.value = result
+  } catch (error) {
+    developers.value = 'Error invoking function'
+  }
+}
+
+const deleteDeveloper = async () => {
+  try {
+    await invoke('deleteDevelopers')
+    getDevelopers()
+  } catch (error) {
+    developers.value = 'Error invoking function'
+  }
+}
+
+
 </script>
