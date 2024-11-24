@@ -7,4 +7,4 @@ resolver.define('saveDevelopers', saveDevelopers)
 resolver.define('deleteDevelopers', deleteDevelopers)
 resolver.define('getDevelopers', getDevelopers)
 
-export const handler = resolver.getDefinitions();
+export const handler = resolver.getDefinitions()
