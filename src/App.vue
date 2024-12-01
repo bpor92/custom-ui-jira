@@ -1,35 +1,39 @@
 <template>
   <div class="app-container">
-    <input type="file" @change="setDevelopers" />
 
-    <br>
-    <br>
+    <VCollapse
+      title="Settings"
+      :default-open="false"
+    >
+      <VSelect
+        v-model="selectedValue"
+        :options="options"
+        label="Api provider:"
+        placeholder="Assignee"
+        searchPlaceholder="Search people..."
+        @change="handleChange"
+      />
 
-    <button @click="getDevelopers">get dev</button>
-    <div>{{ developers }}</div>
+      <br>
 
-    <button @click="deleteDeveloper">delete dev</button>
+      <div>Wybierz plik:</div>
+      <input type="file" @change="setDevelopers" />
+      <br>
 
-    <VCard>
-      <template #header>
-        <h2>Api provider</h2>
-      </template>
-      <template #body>
-        <VSelect
-          v-model="selectedValue"
-          :options="options"
-          placeholder="Assignee"
-          searchPlaceholder="Search people..."
-          @change="handleChange"
-        />
-      </template>
-    </VCard>
+      <div>Załaduj plik:</div>
+      <button @click="getDevelopers">get dev</button>
+      <br>
+
+      <div>Usuń plik:</div>
+      <button @click="deleteDeveloper">delete dev</button>
+    </VCollapse>
+
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { VCard, VSelect } from '@/components/ui';
+import { VCard, VSelect, VCollapse } from '@/components/ui';
 import { API_PROVIDER } from '@/constants/ai-provider-const';
 import type { ApiProvider } from '@/types/ai-provider-type';
 import { useDevelopers } from './composables/useDevelopers';

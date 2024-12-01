@@ -1,6 +1,9 @@
 <template>
   <div class="select" v-on-click-outside="handleClickOutside">
-    <div 
+    <VLabel v-if="label">
+      {{ label }}
+    </VLabel>
+    <div
       @click="toggleDropdown"
       class="select__box"
       :class="{ 'select__box--open': isOpen }"
@@ -8,23 +11,11 @@
       <span class="select__text">
         {{ selectedLabel || placeholder }}
       </span>
-      <svg
-        class="select__caret"
-        :class="{ 'select__caret--open': isOpen }"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      >
-        <polyline points="6 9 12 15 18 9"></polyline>
-      </svg>
+      <VCaret :isOpen="isOpen" />
     </div>
 
-    <div 
-      v-if="isOpen" 
+    <div
+      v-if="isOpen"
       class="select__dropdown"
     >
       <ul class="select__list">
@@ -45,6 +36,7 @@
 <script lang="ts" setup>
 import { ref, computed } from 'vue'
 import { vOnClickOutside } from '@vueuse/components'
+import VCaret from './v-caret.vue'
 
 interface SelectOption {
   value: string | number
@@ -54,10 +46,11 @@ interface SelectOption {
 interface Props {
   options: SelectOption[]
   placeholder?: string
-  modelValue?: string | number
+  modelValue?: string | number,
+  label?: string
 }
 
-const { placeholder = 'Select an option', modelValue = '', options = [] } = defineProps<Props>()
+const { placeholder = 'Select an option', modelValue = '', options = [], label = '' } = defineProps<Props>()
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: string | number): void
@@ -99,12 +92,12 @@ const handleClickOutside = (event: MouseEvent): void => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 12px;
+  padding: 6px 12px;
   background-color: #FAFBFC;
   border: 1px solid #DFE1E6;
   border-radius: 3px;
   cursor: pointer;
-  min-height: 36px;
+  min-height: 16px;
   transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
